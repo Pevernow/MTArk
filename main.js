@@ -18,15 +18,46 @@ function createWindow() {
         width: width,
         height: height,
         webPreferences: {
-            preload: path.join(__dirname, 'preload.js')
+            preload: path.join(__dirname, 'preload.js'),
+            nodeIntegration: true
         },
         transparent: true,
         frame: false
     })
+    let ipcMain = require('electron').ipcMain;
+    //接收最小化命令
+    ipcMain.on('window-min', function () {
+        mainWindow.minimize();
+    })
+    //接收最大化命令
+    ipcMain.on('window-max', function () {
+        if (mainWindow.isMaximized()) {
+            mainWindow.restore();
+        } else {
+            mainWindow.maximize();
+        }
+    })
+    //接收关闭命令
+    ipcMain.on('window-close', function () {
+        mainWindow.close();
+    })
+    mainWindow.on('maximize', function () {
+        mainWindow.webContents.send('main-window-max');
+    })
+    mainWindow.on('unmaximize', function () {
+        mainWindow.webContents.send('main-window-unmax');
+    })
+    ipcMain.on("page-main", function () {
+        mainWindow.loadURL(path.join(__dirname, '/main.html'))
+    })
+    ipcMain.on("page-worlds", function () {
+        mainWindow.loadURL(path.join(__dirname, '/worlds.html'))
+    })
+
     mainWindow.webContents.openDevTools();
     //mainWindow.setSkipTaskbar(true);
     // and load the index.html of the app.
-    mainWindow.loadFile('index.html')
+    mainWindow.loadFile('init.html')
     // Open the DevTools.
     // mainWindow.webContents.openDevTools()
 }

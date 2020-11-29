@@ -1,6 +1,9 @@
 // All of the Node.js APIs are available in the preload process.
 // It has the same sandbox as a Chrome extension.
-var core = require("./node/core")
+let ipcRenderer = require('electron').ipcRenderer;
+var core = require("./node/core");
+worlds = require("./node/worlds");
+
 
 //keep setImmediate alive
 var _setImmediate = setImmediate;
@@ -14,5 +17,10 @@ async function init() {
     await core.upgrade();
 }
 window.addEventListener("load", function () {
-    init();
+    if (window.location.pathname.indexOf("init.html") != -1) {
+        init();
+    };
+    if (window.location.pathname.indexOf("worlds.html") != -1) {
+        worlds.show_worlds();
+    };
 });

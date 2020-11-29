@@ -2,7 +2,6 @@ var fs = require("fs");
 var tool = require("./tool")
 var execSync = require("child_process").execSync;
 var compressing = require("compressing");
-var fs = require("fs");
 var path = require("path");
 var translater = require("./translater")
 var S = new translater()
@@ -41,10 +40,11 @@ async function upgrade() {
     var cpu = tool.getCPU();
     try {
         var res = await tool.getsync(
-            "https://api.github.com/repos/minetest/minetest/releases/latest"
+            "https://api.github.com/repos/minetest/minetest/releases/latest", 1000
         );
     } catch (e) {
-        console.log("Network timeout,sikpping upgrade")
+        console.log("Network timeout,sikpping upgrade");
+        ipcRenderer.send("page-main");
         return;
     }
     if (fs.existsSync(".minetest")) {

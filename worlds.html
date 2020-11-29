@@ -1,0 +1,47 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy-Report-Only">
+    <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MTArk</title>
+    <link rel="stylesheet" href="css/uikit.min.css" />
+    <script src="js/uikit.min.js"></script>
+    <script src="js/uikit-icons.min.js"></script>
+    <script src="js/jquery-3.5.1.min.js"></script>
+    <script src="js/anime.min.js"></script>
+    <script>if (typeof module === 'object') { window.jQuery = window.$ = module.exports; };</script>
+</head>
+
+<body>
+    <ul id="topbar" class="topbar uk-iconnav" style="-webkit-app-region: no-drag;position: absolute;right: 5%;top: 2%">
+        <li><span id="min" uk-icon="icon: minus"></span></li>
+        <li><span id="max" uk-icon="icon: copy"></span></li>
+        <li><button id="close" type="button" class="uk-close-large" uk-close></button></li>
+    </ul>
+    <table class="uk-table uk-table-hover uk-table-divider uk-margin">
+        <thead>
+            <tr>
+                <th>世界名称</th>
+                <th>修改时间</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody id="worldlist">
+        </tbody>
+    </table>
+    <div id="delworld_modal" uk-modal>
+        <div class="uk-modal-dialog uk-modal-body">
+            <h2 class="uk-modal-title">你确定吗？</h2>
+            <p>你将会永远失去这个世界</p>
+            <p class="uk-text-right">
+                <button class="uk-button uk-button-primary uk-modal-close" type="button">取消</button>
+                <button id="delworld" class="uk-button uk-button-danger uk-modal-close" type="button">确定</button>
+            </p>
+        </div>
+    </div>
+    <script src="./renderer.js"></script>
+</body>
+
+</html>

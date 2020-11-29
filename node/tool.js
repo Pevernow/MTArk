@@ -148,7 +148,7 @@ class StreamDownload {
     }
 }
 */
-function getsync(url) {
+function getsync(url, limit = 5000) {
     return new Promise(function (resolve, reject) {
         request.get(
             {
@@ -158,13 +158,14 @@ function getsync(url) {
                     "content-type": "application/json",
                     "user-agent": "MTArk",
                 },
-                timeout: 30000,
+                timeout: limit,
             },
             function (error, response, body) {
                 if (!error && response.statusCode == 200) {
                     resolve(JSON.parse(body));
-                } else
+                } else {
                     reject(error);
+                }
             }
         );
     });
@@ -174,10 +175,27 @@ function getLanguage() {
     return remote.getGlobal('sharedObject').language || "en";
 }
 
+function delDir(path) {
+    let files = [];
+    if (fs.existsSync(path)) {
+        files = fs.readdirSync(path);
+        files.forEach((file, index) => {
+            let curPath = path + "/" + file;
+            if (fs.statSync(curPath).isDirectory()) {
+                delDir(curPath); //递归删除文件夹
+            } else {
+                fs.unlinkSync(curPath); //删除文件
+            }
+        });
+        fs.rmdirSync(path);
+    }
+}
+
 module.exports = {
     cp_r,
     getsync,
     StreamDownload,
     getCPU,
-    getLanguage
+    getLanguage,
+    delDir
 }

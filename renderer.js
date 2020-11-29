@@ -18,8 +18,8 @@ CreateLodingRing = function (size, dotsize, dotcolor) {
     loadingring.setAttribute("viewBox", "0 0" + " " + size + " " + size);
     loadingring.setAttribute("width", "10%")
     loadingring.setAttribute("height", "10%")
-    loadingring.style.right = "2%";
-    loadingring.style.bottom = "2%";
+    loadingring.style.right = "5%";
+    loadingring.style.bottom = "5%";
     loadingring.style.position = "absolute";
     for (let i = 0; i < 6; i++) {
         let dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
@@ -70,4 +70,44 @@ CreateLodingRing = function (size, dotsize, dotcolor) {
     ring.svgitem = loadingring;
 
     return ring;
+}
+let ipcRenderer = require('electron').ipcRenderer;
+
+var max = document.getElementById('max');
+if (max) {
+    max.addEventListener('click', () => {
+        //发送最大化命令
+        ipcRenderer.send('window-max');
+        //最大化图形切换
+        if (max.getAttribute('src') == 'images/max.png') {
+            max.setAttribute('src', 'images/maxed.png');
+        } else {
+            max.setAttribute('src', 'images/max.png');
+        }
+    })
+}
+
+var min = document.getElementById('min');
+if (min) {
+    min.addEventListener('click', () => {
+        //发送最小化命令
+        ipcRenderer.send('window-min');
+    })
+}
+
+document.getElementById('close').addEventListener('click', () => {
+    //发送关闭命令
+    ipcRenderer.send('window-close');
+})
+ipcRenderer.on('main-window-max', (event) => {
+    max.classList.remove('icon-max');
+    max.classList.add('icon-maxed');
+});
+ipcRenderer.on('main-window-unmax', (event) => {
+    max.classList.remove('icon-maxed');
+    max.classList.add('icon-max');
+});
+
+function jump(text) {
+    ipcRenderer.send(text);
 }
